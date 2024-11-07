@@ -8,14 +8,6 @@ export const TaskList = () => {
 	const [tasks, setTasks] = useState([]);
 	const [loading, setLoading] = useState(true);
 	// const { data, loading, error } = useFetch('/tasks');
-	// const [tasks, setTasks] = useState([]);
-
-	// useEffect(() => {
-	// 	if (data) {
-	// 		// console.log(data);
-	// 		// setTasks(data);
-	// 	}
-	// }, [data]);
 
 	// get all tasks
 	useEffect(() => {
@@ -31,7 +23,6 @@ export const TaskList = () => {
 	}, []);
 
 	const addTask = async taskName => {
-		// setLoading(true);
 		const res = await fetch('http://localhost:3000/tasks', {
 			method: 'POST',
 			headers: {
@@ -39,20 +30,35 @@ export const TaskList = () => {
 			},
 			body: JSON.stringify({ taskName }),
 		});
+		if (!res.ok) {
+			// set error message
+			throw new Error(data.message || 'Something went wrong');
+		}
 		const data = await res.json();
 		setTasks([...tasks, data]);
-
-		// setTasks([...tasks, { name: taskName }]);
 	};
 
-	const deleteTask = async taskName => {};
+	const deleteTask = async taskId => {
+		const res = await fetch(`http://localhost:3000/tasks/${taskId}`, {
+			method: 'DELETE',
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		if (!res.ok) {
+			// set error message
+			throw new Error(data.message || 'Something went wrong');
+		}
+		const data = await res.json();
+		setTasks([...tasks.filter(task => task.id !== taskId)]);
+	};
 
 	return (
 		<>
 			<AddTaskDialog action={addTask} />
 			{loading && <Spinner size="3" />}
 			{tasks.map(task => (
-				<TaskItem name={task.name} key={task.name} />
+				<TaskItem name={task.name} id={task.id} key={task.id} onDelete={deleteTask} />
 			))}
 		</>
 	);

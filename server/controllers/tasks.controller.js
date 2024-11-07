@@ -1,4 +1,5 @@
 // In-memory task storage
+// If I had more time I would use a database (probably mongo with mongoose)
 let tasks = [];
 
 // Get all tasks
@@ -16,7 +17,7 @@ export const getTaskById = (req, res) => {
 // Create task
 export const createTask = (req, res) => {
 	const task = {
-		id: tasks.length + 1,
+		id: Date.now(),
 		name: req.body.taskName,
 	};
 	tasks.push(task);
