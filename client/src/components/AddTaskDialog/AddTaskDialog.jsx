@@ -4,14 +4,14 @@ import { Flex, Box, Text, Dialog, Button, TextField, Grid } from '@radix-ui/them
 export const AddTaskDialog = ({ action }) => {
 	const [open, setOpen] = useState(false);
 	const taskNameInputRef = useRef(null);
+	const [loading, setLoading] = useState(false);
 
-	const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
-
-	const onSave = async () => {
-		// fix later
-		await sleep();
-		console.log('save');
+	const onSave = async event => {
+		event.preventDefault();
+		setLoading(true);
+		await action(taskNameInputRef.current.value);
 		setOpen(false);
+		setLoading(false);
 	};
 
 	return (
@@ -48,15 +48,7 @@ export const AddTaskDialog = ({ action }) => {
 						</Button>
 					</Dialog.Close>
 					<Dialog.Close>
-						<Button
-							onClick={async event => {
-								event.preventDefault();
-								await sleep(1000);
-								console.log('save');
-								await action(taskNameInputRef.current.value);
-								setOpen(false);
-							}}
-						>
+						<Button onClick={onSave} loading={loading}>
 							Save
 						</Button>
 					</Dialog.Close>
