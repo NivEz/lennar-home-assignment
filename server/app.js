@@ -1,10 +1,10 @@
-const express = require('express');
+import express, { json } from 'express';
 
 const app = express();
 const port = 3000;
 
 // Middleware
-app.use(express.json());
+app.use(json());
 
 // Routes
 // app.use('/api/users', userRoutes)
