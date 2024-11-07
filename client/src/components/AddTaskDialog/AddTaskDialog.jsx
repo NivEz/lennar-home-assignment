@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useRef } from 'react';
 import { Flex, Box, Text, Dialog, Button, TextField, Grid } from '@radix-ui/themes';
 
-export const AddTaskDialog = () => {
+export const AddTaskDialog = ({ action }) => {
 	const [open, setOpen] = useState(false);
+	const taskNameInputRef = useRef(null);
 
 	const sleep = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -30,7 +31,7 @@ export const AddTaskDialog = () => {
 						<Text as="div" size="2" mb="1" weight="bold">
 							Name
 						</Text>
-						<TextField.Root placeholder="Enter task name" />
+						<TextField.Root ref={taskNameInputRef} placeholder="Enter task name" />
 					</label>
 					<label>
 						<Text as="div" size="2" mb="1" weight="bold">
@@ -51,6 +52,8 @@ export const AddTaskDialog = () => {
 							onClick={async event => {
 								event.preventDefault();
 								await sleep(1000);
+								console.log('save');
+								await action(taskNameInputRef.current.value);
 								setOpen(false);
 							}}
 						>
