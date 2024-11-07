@@ -1,8 +1,8 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { AddTaskDialog } from '../AddTaskDialog/AddTaskDialog';
 import { TaskItem } from '../TaskItem/TaskItem';
 import useFetch from '../../hooks/useFetch';
-import { Spinner } from '@radix-ui/themes';
+import { Spinner, Flex, Separator } from '@radix-ui/themes';
 
 export const TaskList = () => {
 	const [tasks, setTasks] = useState([]);
@@ -57,9 +57,19 @@ export const TaskList = () => {
 		<>
 			<AddTaskDialog action={addTask} />
 			{loading && <Spinner size="3" />}
-			{tasks.map(task => (
-				<TaskItem name={task.name} id={task.id} key={task.id} onDelete={deleteTask} />
-			))}
+			<Flex direction="column" gap="3" p="4">
+				{tasks.map(task => (
+					<Fragment key={task.id}>
+						<TaskItem
+							name={task.name}
+							id={task.id}
+							key={task.id}
+							onDelete={deleteTask}
+						/>
+						<Separator size="4" />
+					</Fragment>
+				))}
+			</Flex>
 		</>
 	);
 };
