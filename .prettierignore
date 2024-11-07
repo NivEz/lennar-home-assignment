@@ -1,0 +1,13 @@
+node_modules
+
+.idea
+.vscode
+
+.env
+
+README.md
+
+package-lock.json
+yarn.lock
+
+dist
